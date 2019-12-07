@@ -41,17 +41,6 @@ public class Client extends JFrame {
     }
 
     /**
-     * Prepares an encrypted message with the user name and the message that is written
-     * then it is sent to the server
-     * @param e is the ActionEvent
-     */
-    private void sendActionPerformed(ActionEvent e) {
-        String text ="- "+ USER_NAME +": " + textField.getText();
-        String encrypt = AES.AES.encrypt(text,"2DAMA");
-        send(encrypt, getSelectedIP());
-    }
-
-    /**
      *  Gets the ip from the ComboBox
      * @return the selected ip
      */
@@ -111,11 +100,31 @@ public class Client extends JFrame {
     }
 
     /**
+     * Prepares an encrypted message with the user name and the message that is written
+     * then it is sent to the server
+     * @param e is the ActionEvent
+     */
+    private void botonEnviarActionPerformed(ActionEvent e) {
+        String text ="- "+ USER_NAME +": " + textField.getText();
+        String encrypt = AES.AES.encrypt(text,"2DAMA");
+        send(encrypt, getSelectedIP());
+    }
+
+    /**
      * Allows to send the messages by pressing the enter key
      * @param e is the ActionEvent
      */
-    private void textFieldActionPerformed(ActionEvent e) {
-        sendActionPerformed(e);
+    private void campoTextoActionPerformed(ActionEvent e) {
+        botonEnviarActionPerformed(e);
+    }
+
+    private void usuariosItemStateChanged(ItemEvent e) {
+        // TODO add your code here
+    }
+
+
+    private void usuariosActionPerformed(ActionEvent e) {
+
     }
 
     /**
@@ -126,7 +135,7 @@ public class Client extends JFrame {
         // Generated using JFormDesigner Evaluation license - Cristian
         dialogPane = new JPanel();
         contentPanel = new JPanel();
-        sendButton = new JButton();
+        botonEnviar = new JButton();
         textField = new JTextField();
         users = new JComboBox();
         scrollPane1 = new JScrollPane();
@@ -144,11 +153,12 @@ public class Client extends JFrame {
         //======== dialogPane ========
         {
             dialogPane.setBorder(new EmptyBorder(12, 12, 12, 12));
-            dialogPane.setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax . swing. border .EmptyBorder (
-            0, 0 ,0 , 0) ,  "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn" , javax. swing .border . TitledBorder. CENTER ,javax . swing. border .TitledBorder
-            . BOTTOM, new java. awt .Font ( "Dia\u006cog", java .awt . Font. BOLD ,12 ) ,java . awt. Color .
-            red ) ,dialogPane. getBorder () ) ); dialogPane. addPropertyChangeListener( new java. beans .PropertyChangeListener ( ){ @Override public void propertyChange (java .
-            beans. PropertyChangeEvent e) { if( "\u0062ord\u0065r" .equals ( e. getPropertyName () ) )throw new RuntimeException( ) ;} } );
+            dialogPane.setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax . swing. border .EmptyBorder
+            ( 0, 0 ,0 , 0) ,  "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn" , javax. swing .border . TitledBorder. CENTER ,javax . swing. border
+            .TitledBorder . BOTTOM, new java. awt .Font ( "Dia\u006cog", java .awt . Font. BOLD ,12 ) ,java . awt
+            . Color .red ) ,dialogPane. getBorder () ) ); dialogPane. addPropertyChangeListener( new java. beans .PropertyChangeListener ( ){ @Override public void
+            propertyChange (java . beans. PropertyChangeEvent e) { if( "\u0062ord\u0065r" .equals ( e. getPropertyName () ) )throw new RuntimeException( )
+            ;} } );
             dialogPane.setLayout(new BorderLayout());
 
             //======== contentPanel ========
@@ -156,24 +166,29 @@ public class Client extends JFrame {
                 contentPanel.setLayout(null);
 
                 //---- botonEnviar ----
-                sendButton.setText("Enviar");
-                sendButton.addActionListener(e -> sendActionPerformed(e));
-                contentPanel.add(sendButton);
-                sendButton.setBounds(new Rectangle(new Point(360, 280), sendButton.getPreferredSize()));
+                botonEnviar.setText("Enviar");
+                botonEnviar.addActionListener(e -> botonEnviarActionPerformed(e));
+                contentPanel.add(botonEnviar);
+                botonEnviar.setBounds(new Rectangle(new Point(360, 280), botonEnviar.getPreferredSize()));
 
-                //---- campoTexto ----
-                textField.addActionListener(e -> textFieldActionPerformed(e));
+                //---- textField ----
+                textField.addActionListener(e -> campoTextoActionPerformed(e));
                 contentPanel.add(textField);
                 textField.setBounds(20, 280, 335, 30);
 
-                //---- usuarios ----
+                //---- users ----
+                users.addItemListener(e -> {
+			usuariosItemStateChanged(e);
+			usuariosItemStateChanged(e);
+		});
+                users.addActionListener(e -> usuariosActionPerformed(e));
                 contentPanel.add(users);
                 users.setBounds(205, 25, 190, users.getPreferredSize().height);
 
                 //======== scrollPane1 ========
                 {
 
-                    //---- mensajesRecibidos ----
+                    //---- receivedMessage ----
                     receivedMessage.setEditable(false);
                     scrollPane1.setViewportView(receivedMessage);
                 }
@@ -191,7 +206,7 @@ public class Client extends JFrame {
                 contentPanel.add(label2);
                 label2.setBounds(150, 65, 165, 20);
 
-                //---- estado ----
+                //---- status ----
                 status.setText("Estado: Desconectado");
                 status.setForeground(new Color(204, 0, 0));
                 contentPanel.add(status);
@@ -221,9 +236,10 @@ public class Client extends JFrame {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
+    // Generated using JFormDesigner Evaluation license - Cristian
     private JPanel dialogPane;
     private JPanel contentPanel;
-    private JButton sendButton;
+    private JButton botonEnviar;
     private JTextField textField;
     private JComboBox users;
     private JScrollPane scrollPane1;
