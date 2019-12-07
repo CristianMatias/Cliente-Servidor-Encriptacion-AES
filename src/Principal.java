@@ -1,8 +1,8 @@
-import Cliente.Cliente;
+import Cliente.Client;
 
 public class Principal {
     public static void main(String[] args) {
-        Cliente cliente = new Cliente();
-        cliente.setVisible(true);
+        Client client = new Client();
+        client.setVisible(true);
     }
 }
