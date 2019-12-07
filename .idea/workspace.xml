@@ -3,12 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="8e4b29ac-754b-42fa-acec-3c57e33d27d1" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Practica PGV 4/Cliente/Cliente$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Practica PGV 4/Cliente/Cliente$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Practica PGV 4/Cliente/Cliente.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Practica PGV 4/Cliente/Cliente.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Practica PGV 4/Cliente/Cliente.jfd" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Practica PGV 4/Cliente/Cliente.jfd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cliente/Cliente.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cliente/Cliente.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cliente/Cliente.jfd" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cliente/Cliente.jfd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Principal.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Principal.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Practica PGV 4/Cliente/Client$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Practica PGV 4/Cliente/Client$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Practica PGV 4/Cliente/Client.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Practica PGV 4/Cliente/Client.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Cliente/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cliente/Client.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />

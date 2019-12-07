@@ -1,7 +1,3 @@
-/*
- * Created by JFormDesigner on Fri Dec 06 20:57:49 CET 2019
- */
-
 package Cliente;
 
 import java.awt.*;
@@ -16,11 +12,14 @@ import javax.swing.*;
 import javax.swing.border.*;
 
 /**
+ * This class is the GUI of an User that wants to send
+ * a message to a dedicated server and receive a message from them
  * @author Cristian
  */
 public class Client extends JFrame {
     private Socket socketClient;
-    private static final String USER_NAME = "Grupo EMRC";
+    private static final String USER_NAME = "Grupo EduManRobCri";
+    private static final int DOCK = 5555;
 
     /**
      * The constructor, calls the methods initComponents() and fillComboBox();
@@ -47,9 +46,9 @@ public class Client extends JFrame {
      * @param e is the ActionEvent
      */
     private void sendActionPerformed(ActionEvent e) {
-        String texto ="- "+ USER_NAME +": " + textField.getText();
-        String encriptado = AES.AES.encrypt(texto,"2DAMA");
-        send(encriptado, getSelectedIP());
+        String text ="- "+ USER_NAME +": " + textField.getText();
+        String encrypt = AES.AES.encrypt(text,"2DAMA");
+        send(encrypt, getSelectedIP());
     }
 
     /**
@@ -57,8 +56,8 @@ public class Client extends JFrame {
      * @return the selected ip
      */
     private String getSelectedIP(){
-        String servidor = (String) users.getSelectedItem();
-        String[] ip = servidor.split(" - ");
+        String server = (String) users.getSelectedItem();
+        String[] ip = server.split(" - ");
 
         return ip[1];
     }
@@ -71,13 +70,13 @@ public class Client extends JFrame {
     private void send(String encryptMessage, String ip){
         try{
             socketClient = new Socket();
-            InetSocketAddress address = new InetSocketAddress(ip, 5555);
+            InetSocketAddress address = new InetSocketAddress(ip, DOCK);
             socketClient.connect(address);
             stateChange();
 
-            OutputStream mensaje = socketClient.getOutputStream();
-            PrintWriter mandar = new PrintWriter(mensaje,true);
-            mandar.println(encryptMessage);
+            OutputStream message = socketClient.getOutputStream();
+            PrintWriter send = new PrintWriter(message,true);
+            send.println(encryptMessage);
 
             receive();
 
@@ -93,9 +92,9 @@ public class Client extends JFrame {
      * @throws IOException in case that there is no message received
      */
     private void receive() throws IOException {
-        DataInputStream recibir = new DataInputStream(socketClient.getInputStream());
-        String mensaje = recibir.readUTF();
-        receivedMessage.setText(receivedMessage.getText()+AES.AES.decrypt(mensaje,"2DAMA")+"\n");
+        DataInputStream get = new DataInputStream(socketClient.getInputStream());
+        String message = get.readUTF();
+        receivedMessage.setText(receivedMessage.getText()+AES.AES.decrypt(message,"2DAMA")+"\n");
     }
 
     /**
@@ -104,10 +103,10 @@ public class Client extends JFrame {
     private void stateChange() {
         if (socketClient.isConnected()) {
             status.setForeground(Color.green);
-            status.setText("Estado conectado");
+            status.setText("Estado: conectado");
         } else {
             status.setForeground(Color.red);
-            status.setText("Estado desconectado");
+            status.setText("Estado: desconectado");
         }
     }
 
