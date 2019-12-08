@@ -10,9 +10,10 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Practica PGV 4/Cliente/Client$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Practica PGV 4/Cliente/Client$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Practica PGV 4/Cliente/Client.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Practica PGV 4/Cliente/Client.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Practica PGV 4/Cliente/Client.jfd" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Practica PGV 4/Cliente/Client.jfd" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Practica PGV 4/META-INF/MANIFEST.MF" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Practica PGV 4/META-INF/MANIFEST.MF" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Cliente/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cliente/Client.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cliente/Client.jfd" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cliente/Client.jfd" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" beforeDir="false" afterPath="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Principal.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Principal.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -39,7 +40,7 @@
   <component name="ProjectId" id="1UcgCJzYKgGnmBNXVPE442IsYFF" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Downloads/Proyecto-PGV-4-master(2)" />
     <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -56,7 +57,14 @@
       </list>
     </option>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.Principal">
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Main" />
+      <module name="Practica PGV 4" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Principal" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Principal" />
       <module name="Practica PGV 4" />
@@ -67,6 +75,7 @@
     <recent_temporary>
       <list>
         <item itemvalue="Application.Principal" />
+        <item itemvalue="Application.Main" />
       </list>
     </recent_temporary>
   </component>
