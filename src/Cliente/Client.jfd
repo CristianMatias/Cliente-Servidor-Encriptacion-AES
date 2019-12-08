@@ -13,9 +13,9 @@ new FormModel {
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jformdesigner.runtime.NullLayout ) ) {
 					name: "contentPanel"
 					add( new FormComponent( "javax.swing.JButton" ) {
-						name: "botonEnviar"
+						name: "sendButton"
 						"text": "Enviar"
-						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "botonEnviarActionPerformed", true ) )
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "sendActionPerformed", true ) )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"x": 360
 						"y": 280
@@ -31,12 +31,9 @@ new FormModel {
 					} )
 					add( new FormComponent( "javax.swing.JComboBox" ) {
 						name: "users"
-						addEvent( new FormEvent( "java.awt.event.ItemListener", "itemStateChanged", "usuariosItemStateChanged", true ) )
-						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "usuariosActionPerformed", true ) )
-						addEvent( new FormEvent( "java.awt.event.ItemListener", "itemStateChanged", "usuariosItemStateChanged", true ) )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-						"x": 205
-						"y": 25
+						"x": 185
+						"y": 35
 						"width": 190
 					} )
 					add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
@@ -55,8 +52,8 @@ new FormModel {
 						name: "label1"
 						"text": "Usuarios: "
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-						"x": 130
-						"y": 25
+						"x": 110
+						"y": 40
 						"width": 70
 						"height": 25
 					} )

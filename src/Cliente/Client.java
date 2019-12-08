@@ -14,12 +14,18 @@ import javax.swing.border.*;
 /**
  * This class is the GUI of an User that wants to send
  * a message to a dedicated server and receive a message from them
+ * Global variables:
+ *      socketClient - The socket that will be used to send and receive messages
+ *      USER_NAME - The name of the group, it will be sent to the server to being easy to the verification of the client
+ *      DOCK - The dock that will be using to communicate, default is 5555
+ *      ENCRYPT_CODE - The code that will be use to encrypt and decrypt the messages
  * @author Cristian
  */
 public class Client extends JFrame {
     private Socket socketClient;
-    private static final String USER_NAME = "Grupo EduManRobCri";
-    private static final int DOCK = 5555;
+    private static final String USER_NAME = "Grupo EMRC";
+    private static int DOCK = 5555;
+    private static String ENCRYPT_CODE = "2DAMA";
 
     /**
      * The constructor, calls the methods initComponents() and fillComboBox();
@@ -30,14 +36,46 @@ public class Client extends JFrame {
     }
 
     /**
+     * With this method you can change the dock that will be use
+     * @param newDock new Dock to use
+     */
+    public void setDock(int newDock){
+        DOCK = newDock;
+    }
+
+    /**
+     * Returns the messages from the TextArea receivedMessages
+     * @return an String with the messages in the TextArea
+     */
+    public String getMessages(){
+        return receivedMessage.getText();
+    }
+
+    /**
+     * Puts a String in the TextArea receivedMessages
+     * @param text is the String that will be added
+     */
+    public void setMessages(String text){
+        receivedMessage.setText(text);
+    }
+
+    /**
+     * Change the key of encryption
+     * @param key the new key to encrypt
+     */
+    public void setEncryptCode(String key){
+        ENCRYPT_CODE = key;
+    }
+
+    /**
      * This method fills the ComboBox with the name and ip
      * of the different groups
      */
     private void fillComboBox(){
         users.addItem("Grupo EMRC - 192.168.0.23");
-        users.addItem("Grupo 1 - 1.0.0.0");
-        users.addItem("Grupo 2 - 1.0.0.2");
-        users.addItem("Grupo 3 - 1.0.0.3");
+        users.addItem("Grupo 1 - 192.168.0.24");
+        users.addItem("Grupo 2 - 192.168.0.25");
+        users.addItem("Grupo 3 - 192.168.0.26");
     }
 
     /**
@@ -52,23 +90,21 @@ public class Client extends JFrame {
     }
 
     /**
-     * Send to the server an encrypted message
+     * Send to the server an encrypted message, also it will call
+     * a method to receive a message back from the server
      * @param encryptMessage is the message that will be sent
      * @param ip is the ip of the server
+     * @throws IOException if it wasn't able to connect
      */
-    private void send(String encryptMessage, String ip){
+    private void connectToServer(String encryptMessage, String ip){
         try{
             socketClient = new Socket();
             InetSocketAddress address = new InetSocketAddress(ip, DOCK);
             socketClient.connect(address);
             stateChange();
 
-            OutputStream message = socketClient.getOutputStream();
-            PrintWriter send = new PrintWriter(message,true);
-            send.println(encryptMessage);
-
-            receive();
-
+            sendMessage(encryptMessage);
+            receiveMessage();
             socketClient.close();
         }catch (IOException ex){
             JOptionPane.showMessageDialog(this,"Error al conectarse");
@@ -76,14 +112,29 @@ public class Client extends JFrame {
     }
 
     /**
+     * Sends the message to the server, this message is encrypted
+     * @param encryptMessage the message that will be sent to the server
+     * @throws IOException if the message couldn't be sent to the server
+     */
+    private void sendMessage(String encryptMessage) throws IOException {
+        OutputStream message = socketClient.getOutputStream();
+        PrintWriter send = new PrintWriter(message,true);
+        send.println(encryptMessage);
+    }
+
+    /**
      * Receive a message from the server, decrypt it and finally
      * show it to the user
      * @throws IOException in case that there is no message received
      */
-    private void receive() throws IOException {
-        DataInputStream get = new DataInputStream(socketClient.getInputStream());
-        String message = get.readUTF();
-        receivedMessage.setText(receivedMessage.getText()+AES.AES.decrypt(message,"2DAMA")+"\n");
+    private void receiveMessage(){
+        try{
+            DataInputStream get = new DataInputStream(socketClient.getInputStream());
+            String message = get.readUTF();
+            setMessages(getMessages()+AES.AES.decrypt(message,ENCRYPT_CODE)+"\n");
+        }catch (IOException ex){
+            JOptionPane.showMessageDialog(this,"Mensaje no recibido");
+        }
     }
 
     /**
@@ -104,10 +155,11 @@ public class Client extends JFrame {
      * then it is sent to the server
      * @param e is the ActionEvent
      */
-    private void botonEnviarActionPerformed(ActionEvent e) {
+    private void sendActionPerformed(ActionEvent e) {
         String text ="- "+ USER_NAME +": " + textField.getText();
-        String encrypt = AES.AES.encrypt(text,"2DAMA");
-        send(encrypt, getSelectedIP());
+        String encrypt = AES.AES.encrypt(text,ENCRYPT_CODE);
+        textField.setText("");
+        connectToServer(encrypt, getSelectedIP());
     }
 
     /**
@@ -115,16 +167,7 @@ public class Client extends JFrame {
      * @param e is the ActionEvent
      */
     private void campoTextoActionPerformed(ActionEvent e) {
-        botonEnviarActionPerformed(e);
-    }
-
-    private void usuariosItemStateChanged(ItemEvent e) {
-        // TODO add your code here
-    }
-
-
-    private void usuariosActionPerformed(ActionEvent e) {
-
+        sendActionPerformed(e);
     }
 
     /**
@@ -135,7 +178,7 @@ public class Client extends JFrame {
         // Generated using JFormDesigner Evaluation license - Cristian
         dialogPane = new JPanel();
         contentPanel = new JPanel();
-        botonEnviar = new JButton();
+        sendButton = new JButton();
         textField = new JTextField();
         users = new JComboBox();
         scrollPane1 = new JScrollPane();
@@ -153,37 +196,29 @@ public class Client extends JFrame {
         //======== dialogPane ========
         {
             dialogPane.setBorder(new EmptyBorder(12, 12, 12, 12));
-            dialogPane.setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax . swing. border .EmptyBorder
-            ( 0, 0 ,0 , 0) ,  "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn" , javax. swing .border . TitledBorder. CENTER ,javax . swing. border
-            .TitledBorder . BOTTOM, new java. awt .Font ( "Dia\u006cog", java .awt . Font. BOLD ,12 ) ,java . awt
-            . Color .red ) ,dialogPane. getBorder () ) ); dialogPane. addPropertyChangeListener( new java. beans .PropertyChangeListener ( ){ @Override public void
-            propertyChange (java . beans. PropertyChangeEvent e) { if( "\u0062ord\u0065r" .equals ( e. getPropertyName () ) )throw new RuntimeException( )
-            ;} } );
+            dialogPane.setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax . swing. border .EmptyBorder (
+            0, 0 ,0 , 0) ,  "JF\u006frm\u0044es\u0069gn\u0065r \u0045va\u006cua\u0074io\u006e" , javax. swing .border . TitledBorder. CENTER ,javax . swing. border .TitledBorder
+            . BOTTOM, new java. awt .Font ( "D\u0069al\u006fg", java .awt . Font. BOLD ,12 ) ,java . awt. Color .
+            red ) ,dialogPane. getBorder () ) ); dialogPane. addPropertyChangeListener( new java. beans .PropertyChangeListener ( ){ @Override public void propertyChange (java .
+            beans. PropertyChangeEvent e) { if( "\u0062or\u0064er" .equals ( e. getPropertyName () ) )throw new RuntimeException( ) ;} } );
             dialogPane.setLayout(new BorderLayout());
 
             //======== contentPanel ========
             {
                 contentPanel.setLayout(null);
 
-                //---- botonEnviar ----
-                botonEnviar.setText("Enviar");
-                botonEnviar.addActionListener(e -> botonEnviarActionPerformed(e));
-                contentPanel.add(botonEnviar);
-                botonEnviar.setBounds(new Rectangle(new Point(360, 280), botonEnviar.getPreferredSize()));
+                //---- sendButton ----
+                sendButton.setText("Enviar");
+                sendButton.addActionListener(e -> sendActionPerformed(e));
+                contentPanel.add(sendButton);
+                sendButton.setBounds(new Rectangle(new Point(360, 280), sendButton.getPreferredSize()));
 
                 //---- textField ----
                 textField.addActionListener(e -> campoTextoActionPerformed(e));
                 contentPanel.add(textField);
                 textField.setBounds(20, 280, 335, 30);
-
-                //---- users ----
-                users.addItemListener(e -> {
-			usuariosItemStateChanged(e);
-			usuariosItemStateChanged(e);
-		});
-                users.addActionListener(e -> usuariosActionPerformed(e));
                 contentPanel.add(users);
-                users.setBounds(205, 25, 190, users.getPreferredSize().height);
+                users.setBounds(185, 35, 190, users.getPreferredSize().height);
 
                 //======== scrollPane1 ========
                 {
@@ -198,7 +233,7 @@ public class Client extends JFrame {
                 //---- label1 ----
                 label1.setText("Usuarios: ");
                 contentPanel.add(label1);
-                label1.setBounds(130, 25, 70, 25);
+                label1.setBounds(110, 40, 70, 25);
 
                 //---- label2 ----
                 label2.setText("Mensajes recibidos");
@@ -239,7 +274,7 @@ public class Client extends JFrame {
     // Generated using JFormDesigner Evaluation license - Cristian
     private JPanel dialogPane;
     private JPanel contentPanel;
-    private JButton botonEnviar;
+    private JButton sendButton;
     private JTextField textField;
     private JComboBox users;
     private JScrollPane scrollPane1;
