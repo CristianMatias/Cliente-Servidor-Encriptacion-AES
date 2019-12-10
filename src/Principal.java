@@ -4,7 +4,7 @@ import Servidor.Servidor;
 import java.io.IOException;
 
 public class Principal {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
         Client client = new Client();
         Servidor servidor = new Servidor();
 

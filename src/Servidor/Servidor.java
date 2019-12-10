@@ -7,6 +7,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.Semaphore;
 import javax.swing.border.*;
 
 /**
@@ -31,13 +32,14 @@ public class Servidor extends JFrame
     private int PUERTO = 5000;
     private final String MENSAJE_CONFIRMACION = "Mensaje recibido: Servidor EMRC";
     private static String CLAVE_ENCRIPTACION = "2DAMA";
+    private final Semaphore semaforo = new Semaphore(1);
 
     /**
      * Constructor, only calls the initComponents
      */
     public Servidor()
     {
-        setTitle("Servidor");
+        setTitle("PGV 4 - Interfaz Servidor");
         initComponents();
     }
 
@@ -55,22 +57,26 @@ public class Servidor extends JFrame
      * finally, close the connection with the client
      * @throws IOException if a connection error happens
      */
-    public void iniciar() throws IOException
-    {
+    public void iniciar() throws IOException, InterruptedException {
         abrirPuerto();
         if(servidor != null)
         {
             while (true) {
-                socket = servidor.accept();
-                in = new DataInputStream(socket.getInputStream());
-                out = new DataOutputStream(socket.getOutputStream());
-                String mensaje = in.readLine();
-                imprimirMensaje(AES.AES.decrypt(mensaje,CLAVE_ENCRIPTACION));
-                mensaje = AES.AES.encrypt(MENSAJE_CONFIRMACION, CLAVE_ENCRIPTACION);
-                out.writeUTF(mensaje);
-                socket.close();
-                in.close();
-                out.close();
+                if(semaforo.availablePermits() > 0)
+                {
+                    semaforo.acquire();
+                    socket = servidor.accept();
+                    in = new DataInputStream(socket.getInputStream());
+                    out = new DataOutputStream(socket.getOutputStream());
+                    String mensaje = in.readLine();
+                    imprimirMensaje(AES.AES.decrypt(mensaje,CLAVE_ENCRIPTACION));
+                    mensaje = AES.AES.encrypt(MENSAJE_CONFIRMACION, CLAVE_ENCRIPTACION);
+                    out.writeUTF(mensaje);
+                    socket.close();
+                    in.close();
+                    out.close();
+                    semaforo.release();
+                }
             }
         }
     }
@@ -115,13 +121,13 @@ public class Servidor extends JFrame
         //======== dialogPane ========
         {
             dialogPane.setBorder(new EmptyBorder(12, 12, 12, 12));
-            dialogPane.setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new
-            javax.swing.border.EmptyBorder(0,0,0,0), "JFor\u006dDesi\u0067ner \u0045valu\u0061tion",javax
-            .swing.border.TitledBorder.CENTER,javax.swing.border.TitledBorder.BOTTOM,new java
-            .awt.Font("Dia\u006cog",java.awt.Font.BOLD,12),java.awt
-            .Color.red),dialogPane. getBorder()));dialogPane. addPropertyChangeListener(new java.beans.
-            PropertyChangeListener(){@Override public void propertyChange(java.beans.PropertyChangeEvent e){if("bord\u0065r".
-            equals(e.getPropertyName()))throw new RuntimeException();}});
+            dialogPane.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing
+            . border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frmDesi\u0067ner Ev\u0061luatio\u006e", javax. swing. border. TitledBorder
+            . CENTER, javax. swing. border. TitledBorder. BOTTOM, new java .awt .Font ("Dialo\u0067" ,java .
+            awt .Font .BOLD ,12 ), java. awt. Color. red) ,dialogPane. getBorder( )) )
+            ; dialogPane. addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e
+            ) {if ("borde\u0072" .equals (e .getPropertyName () )) throw new RuntimeException( ); }} )
+            ;
             dialogPane.setLayout(new BorderLayout());
 
             //======== contentPanel ========
@@ -169,7 +175,6 @@ public class Servidor extends JFrame
         }
         contentPane.add(dialogPane, BorderLayout.CENTER);
         pack();
-        setLocationRelativeTo(getOwner());
         // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }
 
