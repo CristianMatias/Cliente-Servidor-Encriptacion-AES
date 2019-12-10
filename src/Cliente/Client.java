@@ -2,10 +2,7 @@ package Cliente;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.io.DataInputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import javax.swing.*;
@@ -70,12 +67,20 @@ public class Client extends JFrame {
     /**
      * This method fills the ComboBox with the name and ip
      * of the different groups
+     *
+     * The different groups are read from an csv file
      */
     private void fillComboBox(){
-        users.addItem("Grupo EMRC - 192.168.233.51");
-        users.addItem("Grupo 1 - 192.168.0.24");
-        users.addItem("Grupo 2 - 192.168.0.25");
-        users.addItem("Grupo 3 - 192.168.0.26");
+        try {
+            Fichero fichero = new Fichero("src/Cliente/direccionesIP.csv");
+            String[] direcciones = fichero.leer();
+
+            for(String usuario : direcciones){
+                users.addItem(usuario);
+            }
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this,"Fichero de clientes no encontrado");
+        }
     }
 
     /**
@@ -133,7 +138,7 @@ public class Client extends JFrame {
             String message = get.readUTF();
             setMessages(getMessages()+AES.AES.decrypt(message,ENCRYPT_CODE)+"\n");
         }catch (IOException ex){
-            JOptionPane.showMessageDialog(this,"Mensaje no recibido");
+            JOptionPane.showMessageDialog(this,"Confirmación/Validacion no recibida");
         }
     }
 
@@ -196,12 +201,12 @@ public class Client extends JFrame {
         //======== dialogPane ========
         {
             dialogPane.setBorder(new EmptyBorder(12, 12, 12, 12));
-            dialogPane.setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax . swing. border .EmptyBorder
-            ( 0, 0 ,0 , 0) ,  "JFor\u006dDesi\u0067ner \u0045valu\u0061tion" , javax. swing .border . TitledBorder. CENTER ,javax . swing. border
-            .TitledBorder . BOTTOM, new java. awt .Font ( "Dia\u006cog", java .awt . Font. BOLD ,12 ) ,java . awt
-            . Color .red ) ,dialogPane. getBorder () ) ); dialogPane. addPropertyChangeListener( new java. beans .PropertyChangeListener ( ){ @Override public void
-            propertyChange (java . beans. PropertyChangeEvent e) { if( "bord\u0065r" .equals ( e. getPropertyName () ) )throw new RuntimeException( )
-            ;} } );
+            dialogPane.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border
+            . EmptyBorder( 0, 0, 0, 0) , "JF\u006frmDes\u0069gner \u0045valua\u0074ion", javax. swing. border. TitledBorder. CENTER, javax
+            . swing. border. TitledBorder. BOTTOM, new java .awt .Font ("D\u0069alog" ,java .awt .Font .BOLD ,
+            12 ), java. awt. Color. red) ,dialogPane. getBorder( )) ); dialogPane. addPropertyChangeListener (new java. beans
+            . PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("\u0062order" .equals (e .
+            getPropertyName () )) throw new RuntimeException( ); }} );
             dialogPane.setLayout(new BorderLayout());
 
             //======== contentPanel ========
@@ -219,7 +224,7 @@ public class Client extends JFrame {
                 contentPanel.add(textField);
                 textField.setBounds(20, 280, 335, 30);
                 contentPanel.add(users);
-                users.setBounds(185, 35, 190, users.getPreferredSize().height);
+                users.setBounds(185, 30, 190, users.getPreferredSize().height);
 
                 //======== scrollPane1 ========
                 {

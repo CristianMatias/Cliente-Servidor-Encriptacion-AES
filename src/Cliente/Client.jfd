@@ -33,7 +33,7 @@ new FormModel {
 						name: "users"
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"x": 185
-						"y": 35
+						"y": 30
 						"width": 190
 					} )
 					add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
