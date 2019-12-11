@@ -1,4 +1,4 @@
-package Cliente;
+package Ficheros;
 
 import java.io.*;
 

@@ -17,23 +17,23 @@ new FormModel {
 						"text": "Enviar"
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "sendActionPerformed", true ) )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-						"x": 360
-						"y": 280
+						"x": 390
+						"y": 300
 					} )
 					add( new FormComponent( "javax.swing.JTextField" ) {
 						name: "textField"
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "campoTextoActionPerformed", true ) )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-						"x": 20
-						"y": 280
+						"x": 40
+						"y": 300
 						"width": 335
 						"height": 30
 					} )
 					add( new FormComponent( "javax.swing.JComboBox" ) {
 						name: "users"
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-						"x": 185
-						"y": 30
+						"x": 240
+						"y": 40
 						"width": 190
 					} )
 					add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
@@ -43,8 +43,8 @@ new FormModel {
 							"editable": false
 						} )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-						"x": 20
-						"y": 95
+						"x": 35
+						"y": 115
 						"width": 415
 						"height": 170
 					} )
@@ -52,8 +52,8 @@ new FormModel {
 						name: "label1"
 						"text": "Usuarios: "
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-						"x": 110
-						"y": 40
+						"x": 160
+						"y": 45
 						"width": 70
 						"height": 25
 					} )
@@ -62,8 +62,8 @@ new FormModel {
 						"text": "Mensajes recibidos"
 						"font": new java.awt.Font( "Segoe UI", 0, 16 )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-						"x": 150
-						"y": 65
+						"x": 165
+						"y": 85
 						"width": 165
 						"height": 20
 					} )
@@ -76,6 +76,25 @@ new FormModel {
 						"y": 0
 						"width": 155
 					} )
+					add( new FormComponent( "javax.swing.JRadioButton" ) {
+						name: "sendMessage"
+						"text": "Mensaje"
+						"$buttonGroup": new FormReference( "buttonGroup1" )
+						"selected": true
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"x": 25
+						"y": 20
+						"width": 90
+					} )
+					add( new FormComponent( "javax.swing.JRadioButton" ) {
+						name: "sendFile"
+						"text": "Fichero"
+						"$buttonGroup": new FormReference( "buttonGroup1" )
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"x": 25
+						"y": 50
+						"width": 90
+					} )
 				}, new FormLayoutConstraints( class java.lang.String ) {
 					"value": "Center"
 				} )
@@ -84,7 +103,12 @@ new FormModel {
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
-			"size": new java.awt.Dimension( 505, 405 )
+			"size": new java.awt.Dimension( 530, 430 )
+		} )
+		add( new FormNonVisual( "javax.swing.ButtonGroup" ) {
+			name: "buttonGroup1"
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 446 )
 		} )
 	}
 }
