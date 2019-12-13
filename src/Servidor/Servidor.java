@@ -1,5 +1,8 @@
 package Servidor;
 
+import Ficheros.TextFile;
+
+import java.awt.event.*;
 import javax.swing.*;
 import java.awt.*;
 import java.io.DataInputStream;
@@ -21,6 +24,9 @@ import javax.swing.border.*;
  *      PUERTO - The dock that will be using
  *      MENSAJE_CONFIRMACION - The confirmation message that the client will receive
  *      CLAVE_ENCRIPTACION - The key of encryption that will be use
+ *      ARCHIVO - The file that will load the messages
+ *      semaforo - A Semaphore to control the entry of messages
+ *      fichero - An instance of the TextFile class
  * @author Eduardo
  */
 public class Servidor extends JFrame
@@ -32,7 +38,9 @@ public class Servidor extends JFrame
     private int PUERTO = 5000;
     private final String MENSAJE_CONFIRMACION = "Mensaje recibido: Servidor EMRC";
     private static String CLAVE_ENCRIPTACION = "2DAMA";
+    private final String ARCHIVO = "src/Servidor/mensajes.txt";
     private final Semaphore semaforo = new Semaphore(1);
+    private TextFile fichero = new TextFile();
 
     /**
      * Constructor, only calls the initComponents
@@ -97,8 +105,30 @@ public class Servidor extends JFrame
     {
         servidor = new ServerSocket(PUERTO);
         estado.setText("Servidor abierto:");
-        campoTexto.append("Bienvenido al terminal de mensajes.");
+        if(fichero.exists(ARCHIVO))
+        {
+            campoTexto.setText(fichero.read(ARCHIVO));
+            if(campoTexto.getText().isEmpty())
+                campoTexto.append("Bienvenido al terminal de mensajes.");
+        }
+        else
+            campoTexto.append("Bienvenido al terminal de mensajes.");
         estado.setForeground(Color.GREEN);
+    }
+
+    /**
+     * Saves the messages in the txt, so the chat can be saved,
+     * once is saved, it will be loaded every time every time the
+     * app is open
+     * @param e the event itself
+     */
+    private void botonGuardarActionPerformed(ActionEvent e) {
+        if(fichero.exists(ARCHIVO))
+        {
+            fichero.write(ARCHIVO,campoTexto.getText());
+        }
+        else
+            JOptionPane.showMessageDialog(this,"Fichero mensajes no creado en paquete Servidor");
     }
 
     /**
@@ -113,6 +143,7 @@ public class Servidor extends JFrame
         campoTexto = new JTextArea();
         label2 = new JLabel();
         estado = new JLabel();
+        botonGuardar = new JButton();
 
         //======== this ========
         Container contentPane = getContentPane();
@@ -121,13 +152,12 @@ public class Servidor extends JFrame
         //======== dialogPane ========
         {
             dialogPane.setBorder(new EmptyBorder(12, 12, 12, 12));
-            dialogPane.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing
-            . border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frmDesi\u0067ner Ev\u0061luatio\u006e", javax. swing. border. TitledBorder
-            . CENTER, javax. swing. border. TitledBorder. BOTTOM, new java .awt .Font ("Dialo\u0067" ,java .
-            awt .Font .BOLD ,12 ), java. awt. Color. red) ,dialogPane. getBorder( )) )
-            ; dialogPane. addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e
-            ) {if ("borde\u0072" .equals (e .getPropertyName () )) throw new RuntimeException( ); }} )
-            ;
+            dialogPane.setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder
+            (0,0,0,0), "JF\u006frm\u0044es\u0069gn\u0065r \u0045va\u006cua\u0074io\u006e",javax.swing.border.TitledBorder.CENTER,javax.swing.border
+            .TitledBorder.BOTTOM,new java.awt.Font("D\u0069al\u006fg",java.awt.Font.BOLD,12),java.awt
+            .Color.red),dialogPane. getBorder()));dialogPane. addPropertyChangeListener(new java.beans.PropertyChangeListener(){@Override public void
+            propertyChange(java.beans.PropertyChangeEvent e){if("\u0062or\u0064er".equals(e.getPropertyName()))throw new RuntimeException()
+            ;}});
             dialogPane.setLayout(new BorderLayout());
 
             //======== contentPanel ========
@@ -155,6 +185,12 @@ public class Servidor extends JFrame
                 estado.setForeground(new Color(204, 0, 0));
                 contentPanel.add(estado);
                 estado.setBounds(150, 0, 155, estado.getPreferredSize().height);
+
+                //---- botonGuardar ----
+                botonGuardar.setText("Guardar");
+                botonGuardar.addActionListener(e -> botonGuardarActionPerformed(e));
+                contentPanel.add(botonGuardar);
+                botonGuardar.setBounds(new Rectangle(new Point(410, 225), botonGuardar.getPreferredSize()));
 
                 {
                     // compute preferred size
@@ -186,5 +222,6 @@ public class Servidor extends JFrame
     private JTextArea campoTexto;
     private JLabel label2;
     private JLabel estado;
+    private JButton botonGuardar;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }

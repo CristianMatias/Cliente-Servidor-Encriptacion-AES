@@ -29,8 +29,6 @@ public class Client extends JFrame {
     private static final String USER_NAME = "Grupo EMRC";
     private static int DOCK = 5000;
     private static String ENCRYPT_CODE = "2DAMA";
-    public static int SEND_MESSAGE = 1;
-    public static int SEND_FILE = 0;
 
     /**
      * The constructor, calls the methods initComponents() and fillComboBox();
@@ -112,7 +110,6 @@ public class Client extends JFrame {
     private void connectToServer(String encryptMessage, String ip){
         try{
             setConnection(ip);
-            tellServerWhatWillBeSend(SEND_MESSAGE);
             sendMessage(encryptMessage);
             receiveMessage();
             socketClient.close();
@@ -131,17 +128,6 @@ public class Client extends JFrame {
         InetSocketAddress address = new InetSocketAddress(ip, DOCK);
         socketClient.connect(address);
         stateChange();
-    }
-
-    /**
-     * Alerts the server of what will send
-     * @param option indicates if it is a string or a file
-     * @throws IOException if it wasn't able to communicate with the server
-     */
-    private void tellServerWhatWillBeSend(int option) throws IOException {
-        OutputStream message = socketClient.getOutputStream();
-        PrintWriter send = new PrintWriter(message,true);
-        send.println(option);
     }
 
     /**
@@ -189,61 +175,10 @@ public class Client extends JFrame {
      * @param e is the ActionEvent
      */
     private void sendActionPerformed(ActionEvent e) {
-        if(checkWhatWillSend()){
-            String text ="- "+ USER_NAME +": " + textField.getText();
-            String encrypt = AES.AES.encrypt(text,ENCRYPT_CODE);
-            textField.setText("");
-            connectToServer(encrypt, getSelectedIP());
-        }
-        else sendFile();
-    }
-
-    /**
-     * Opens a JFileChooser so the client can choose a file
-     * @return the file chosen
-     */
-    private File fileChooser(){
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.showOpenDialog(this);
-        return fileChooser.getSelectedFile();
-    }
-
-    /**
-     * This method connects to the server, alerts it that will
-     * send a File, the encrypts the file chosen by the user
-     * and send it to the server
-     */
-    private void sendFile(){
-        try {
-            File localFile = fileChooser();
-            setConnection(getSelectedIP());
-            tellServerWhatWillBeSend(SEND_FILE);
-
-            BufferedInputStream bis = new BufferedInputStream(new FileInputStream(localFile));
-            BufferedOutputStream bos = new BufferedOutputStream(socketClient.getOutputStream());
-
-            DataOutputStream dos=new DataOutputStream(socketClient.getOutputStream());
-            dos.writeUTF(localFile.getName());
-
-            byte[] byteArray = new byte[8192];
-            int in;
-            while((in = bis.read(byteArray)) != -1){
-                bos.write(Base64.encode(byteArray),0,in);
-            }
-            bis.close();
-            bos.close();
-
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(this,"No se enviar el archivo");
-        }
-    }
-
-    /**
-     * Detects if the user chose a message or a file
-     * @return true if a message will be sent, false is it will be a file
-     */
-    private boolean checkWhatWillSend(){
-        return sendMessage.isSelected();
+        String text ="- "+ USER_NAME +": " + textField.getText();
+        String encrypt = AES.AES.encrypt(text,ENCRYPT_CODE);
+        textField.setText("");
+        connectToServer(encrypt, getSelectedIP());
     }
 
     /**
@@ -270,8 +205,6 @@ public class Client extends JFrame {
         label1 = new JLabel();
         label2 = new JLabel();
         status = new JLabel();
-        sendMessage = new JRadioButton();
-        sendFile = new JRadioButton();
 
         //======== this ========
         setTitle("PGV 4 - Interfaz Cliente");
@@ -282,12 +215,12 @@ public class Client extends JFrame {
         //======== dialogPane ========
         {
             dialogPane.setBorder(new EmptyBorder(12, 12, 12, 12));
-            dialogPane.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border. EmptyBorder
-            ( 0, 0, 0, 0) , "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn", javax. swing. border. TitledBorder. CENTER, javax. swing. border
-            . TitledBorder. BOTTOM, new java .awt .Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 ), java. awt
-            . Color. red) ,dialogPane. getBorder( )) ); dialogPane. addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void
-            propertyChange (java .beans .PropertyChangeEvent e) {if ("\u0062ord\u0065r" .equals (e .getPropertyName () )) throw new RuntimeException( )
-            ; }} );
+            dialogPane.setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.swing.
+            border.EmptyBorder(0,0,0,0), "JFor\u006dDesi\u0067ner \u0045valu\u0061tion",javax.swing.border.TitledBorder.CENTER
+            ,javax.swing.border.TitledBorder.BOTTOM,new java.awt.Font("Dia\u006cog",java.awt.Font
+            .BOLD,12),java.awt.Color.red),dialogPane. getBorder()));dialogPane. addPropertyChangeListener(
+            new java.beans.PropertyChangeListener(){@Override public void propertyChange(java.beans.PropertyChangeEvent e){if("bord\u0065r"
+            .equals(e.getPropertyName()))throw new RuntimeException();}});
             dialogPane.setLayout(new BorderLayout());
 
             //======== contentPanel ========
@@ -305,7 +238,7 @@ public class Client extends JFrame {
                 contentPanel.add(textField);
                 textField.setBounds(40, 300, 335, 30);
                 contentPanel.add(users);
-                users.setBounds(240, 40, 190, users.getPreferredSize().height);
+                users.setBounds(170, 40, 190, users.getPreferredSize().height);
 
                 //======== scrollPane1 ========
                 {
@@ -320,30 +253,19 @@ public class Client extends JFrame {
                 //---- label1 ----
                 label1.setText("Usuarios: ");
                 contentPanel.add(label1);
-                label1.setBounds(160, 45, 70, 25);
+                label1.setBounds(105, 40, 70, 25);
 
                 //---- label2 ----
                 label2.setText("Mensajes recibidos");
                 label2.setFont(new Font("Segoe UI", Font.PLAIN, 16));
                 contentPanel.add(label2);
-                label2.setBounds(165, 85, 165, 20);
+                label2.setBounds(145, 85, 165, 20);
 
                 //---- status ----
                 status.setText("Estado: Desconectado");
                 status.setForeground(new Color(204, 0, 0));
                 contentPanel.add(status);
                 status.setBounds(170, 0, 155, status.getPreferredSize().height);
-
-                //---- sendMessage ----
-                sendMessage.setText("Mensaje");
-                sendMessage.setSelected(true);
-                contentPanel.add(sendMessage);
-                sendMessage.setBounds(25, 20, 90, sendMessage.getPreferredSize().height);
-
-                //---- sendFile ----
-                sendFile.setText("Fichero");
-                contentPanel.add(sendFile);
-                sendFile.setBounds(25, 50, 90, sendFile.getPreferredSize().height);
 
                 {
                     // compute preferred size
@@ -365,11 +287,6 @@ public class Client extends JFrame {
         contentPane.add(dialogPane, BorderLayout.CENTER);
         pack();
         setLocationRelativeTo(getOwner());
-
-        //---- buttonGroup1 ----
-        ButtonGroup buttonGroup1 = new ButtonGroup();
-        buttonGroup1.add(sendMessage);
-        buttonGroup1.add(sendFile);
         // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }
 
@@ -385,7 +302,5 @@ public class Client extends JFrame {
     private JLabel label1;
     private JLabel label2;
     private JLabel status;
-    private JRadioButton sendMessage;
-    private JRadioButton sendFile;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }
