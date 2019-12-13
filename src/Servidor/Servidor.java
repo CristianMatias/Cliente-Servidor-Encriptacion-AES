@@ -107,7 +107,7 @@ public class Servidor extends JFrame
         estado.setText("Servidor abierto:");
         if(fichero.exists(ARCHIVO))
         {
-            campoTexto.setText(fichero.read(ARCHIVO));
+            campoTexto.append(fichero.read(ARCHIVO));
             if(campoTexto.getText().isEmpty())
                 campoTexto.append("Bienvenido al terminal de mensajes.");
         }

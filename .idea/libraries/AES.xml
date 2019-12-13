@@ -1,7 +1,7 @@
 <component name="libraryTable">
   <library name="AES">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/Libreria/AES.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/Libreria/AES.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
