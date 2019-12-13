@@ -1,0 +1,3 @@
+Bienvenido al terminal de mensajes.
+- Grupo EMRC: Hola
+- Grupo EMRC: Estos son mensajes de prueba
