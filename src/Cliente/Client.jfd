@@ -32,7 +32,7 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JComboBox" ) {
 						name: "users"
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-						"x": 170
+						"x": 200
 						"y": 40
 						"width": 190
 					} )
@@ -52,8 +52,8 @@ new FormModel {
 						name: "label1"
 						"text": "Usuarios: "
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-						"x": 105
-						"y": 40
+						"x": 125
+						"y": 45
 						"width": 70
 						"height": 25
 					} )
